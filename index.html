@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hypercode - A Digital Experience Studio</title>
+    <meta name="description" content="Hypercode is a human-led digital studio building masterpiece websites that are interactive, beautiful, and perform at hyper speed.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@800&family=Poppins:wght@400;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+   
+    <link rel="stylesheet" href="style.css">
+
+    <!-- The Final, Perfected Cursor & Holographic Lift Engine -->
+    <script>
+        (function() {
+            // Immediately exit if this is a touch device (no cursor)
+            if (window.matchMedia("(pointer: coarse)").matches) return;
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const cursorDot = document.getElementById('cursor-dot');
+                const cursorOutline = document.getElementById('cursor-outline');
+                if (!cursorDot || !cursorOutline) return;
+
+                // Make the custom cursor visible and hide the default one
+                document.body.style.cursor = 'none';
+                cursorDot.style.display = 'block';
+                cursorOutline.style.display = 'block';
+
+                const magneticLinks = document.querySelectorAll('.magnetic-link');
+                let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+                let outlinePos = { x: mouse.x, y: mouse.y };
+                let isMagnetic = false;
+                let currentMagneticLink = null;
+
+                // --- CORE CURSOR TRACKING ---
+                window.addEventListener('mousemove', e => {
+                    mouse.x = e.clientX;
+                    mouse.y = e.clientY;
+                });
+                
+                // Hide cursor if it leaves the window
+                document.body.addEventListener('mouseleave', () => {
+                    cursorDot.style.display = 'none';
+                    cursorOutline.style.display = 'none';
+                });
+                document.body.addEventListener('mouseenter', () => {
+                    cursorDot.style.display = 'block';
+                    cursorOutline.style.display = 'block';
+                });
+
+                // --- EFFICIENT ANIMATION LOOP ---
+                const updateCursor = () => {
+                    let targetX = mouse.x;
+                    let targetY = mouse.y;
+
+                    // Dot position is immediate
+                    cursorDot.style.transform = `translate(${mouse.x - 4}px, ${mouse.y - 4}px)`;
+                    
+                    // Handle magnetic link attraction
+                    if (isMagnetic && currentMagneticLink) {
+                        const rect = currentMagneticLink.getBoundingClientRect();
+                        const centerX = rect.left + rect.width / 2;
+                        const centerY = rect.top + rect.height / 2;
+                        targetX = centerX;
+                        targetY = centerY;
+                        const dx = (mouse.x - centerX) * 0.1;
+                        const dy = (mouse.y - centerY) * 0.1;
+                        currentMagneticLink.style.transform = `translate(${dx}px, ${dy}px)`;
+                    }
+                    
+                    // The smooth, cheap 'lerp' function for the outline
+                    const smoothing = 0.2; 
+                    outlinePos.x += (targetX - outlinePos.x) * smoothing;
+                    outlinePos.y += (targetY - outlinePos.y) * smoothing;
+                    
+                    cursorOutline.style.transform = `translate(${outlinePos.x - 20}px, ${outlinePos.y - 20}px)`;
+                    
+                    // Keep the loop going
+                    requestAnimationFrame(updateCursor);
+                };
+                
+                // Start the animation loop
+                updateCursor();
+
+                // --- MAGNETIC LINK LOGIC ---
+                magneticLinks.forEach(link => {
+                    link.addEventListener('mouseenter', () => {
+                        isMagnetic = true;
+                        currentMagneticLink = link;
+                        cursorOutline.classList.add('magnetic-active');
+                    });
+                    link.addEventListener('mouseleave', () => {
+                        isMagnetic = false;
+                        cursorOutline.classList.remove('magnetic-active');
+                        if (currentMagneticLink) {
+                            currentMagneticLink.style.transition = 'transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)';
+                            currentMagneticLink.style.transform = 'translate(0,0)';
+                            setTimeout(() => {
+                                if (currentMagneticLink) currentMagneticLink.style.transition = '';
+                            }, 400);
+                        }
+                        currentMagneticLink = null;
+                    });
+                });
+
+                // --- NEW HOLOGRAPHIC LIFT JAVASCRIPT ---
+                const holographicElements = document.querySelectorAll('.holographic-lift');
+
+                holographicElements.forEach(el => {
+                    const maxRotate = 8; // How much the element tilts in degrees
+
+                    el.addEventListener('mousemove', (e) => {
+                        const rect = el.getBoundingClientRect();
+                        
+                        // Calculate mouse position relative to the element
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+                        
+                        // Update CSS variables for the holographic sheen
+                        el.style.setProperty('--glow-x', `${x}px`);
+                        el.style.setProperty('--glow-y', `${y}px`);
+
+                        // Calculate the 3D tilt
+                        const pX = x / rect.width;
+                        const pY = y / rect.height;
+                        const rY = (pX - 0.5) * 2 * maxRotate;
+                        const rX = -(pY - 0.5) * 2 * maxRotate;
+                        
+                        // Apply the 3D transform for the "lift" effect
+                        el.style.transform = `perspective(1000px) rotateX(${rX}deg) rotateY(${rY}deg) scale(1.1)`;
+                    });
+
+                    el.addEventListener('mouseleave', () => {
+                        // Reset the transform when the mouse leaves
+                        el.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
+                    });
+                });
+                // --- END OF NEW HOLOGRAPHIC LIFT JAVASCRIPT ---
+
+            });
+        })();
+    </script>
+</head>
+<body>
+    <div class="cursor cursor-outline" id="cursor-outline"></div>
+    <div class="cursor cursor-dot" id="cursor-dot"></div>
+    <div id="particles-js"></div>
+    <div id="modal-container" class="modal-container"></div>
+
+    <header class="main-header content-hidden-initial">
+        <div class="container">
+            <a href="#home" class="logo holographic-lift" id="main-logo" aria-label="Hypercode Logo - Go to homepage">
+                 <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+                    <g transform="translate(0.000000,300.000000) scale(0.100000,-0.100000)"
+                    fill="currentColor" stroke="none">
+                        <path d="M720 1200 c0 -1105 0 -1110 20 -1110 20 0 20 6 21 1058 0 581 3 1081 5 1110 5 50 4 52 -20 52 l-26 0 0 -1110z"/>
+                        <path d="M790 2303 c0 -5 1 -192 2 -418 2 -225 3 -458 3 -516 l0 -107 74 -6 c41 -3 105 -6 143 -6 61 0 68 2 68 20 0 19 -7 20 -124 20 l-125 0 0 500 c0 276 -3 505 -6 510 -7 12 -35 13 -35 3z"/>
+                        <path d="M1810 2128 c0 -17 18 -18 231 -18 214 0 230 1 227 18 -3 16 -22 17 -231 17 -210 0 -227 -1 -227 -17z"/>
+                        <path d="M650 2045 c0 -38 3 -45 20 -45 17 0 20 7 20 45 0 38 -3 45 -20 45 -17 0 -20 -7 -20 -45z"/>
+                        <path d="M870 2078 c-1 -2 -2 -173 -4 -380 l-2 -378 108 0 c100 0 108 1 108 19 0 18 -7 20 -91 17 l-90 -2 2 360 c1 326 0 361 -15 364 -9 2 -16 2 -16 0z"/>
+                        <path d="M930 1730 l0 -350 75 0 c68 0 75 2 75 20 0 17 -7 20 -52 20 l-53 0 0 318 c0 174 -2 323 -4 330 -2 6 -11 12 -22 12 -17 0 -18 -16 -19 -350z"/>
+                        <path d="M1920 2059 c0 -18 4 -20 30 -14 l30 7 0 -51 c0 -40 -3 -51 -16 -51 -12 0 -15 6 -10 24 5 20 1 24 -25 30 -17 3 -65 6 -105 6 -59 0 -74 -3 -74 -15 0 -12 16 -15 84 -15 82 0 83 0 79 -24 -4 -19 0 -24 27 -30 70 -14 72 -12 68 54 l-3 60 100 2 c55 1 115 1 133 0 25 -1 32 3 32 17 0 18 -11 19 -175 19 -169 1 -175 0 -175 -19z"/>
+                        <path d="M2135 2011 c-60 -4 -105 -9 -99 -13 5 -4 59 -8 120 -9 94 -1 109 1 112 15 2 9 -2 15 -10 14 -7 -1 -62 -4 -123 -7z"/>
+                        <path d="M652 1038 c3 -839 5 -953 18 -953 13 0 15 114 18 953 2 948 2 952 -18 952 -20 0 -20 -4 -18 -952z"/>
+                        <path d="M2225 1961 c-3 -6 -5 -429 -4 -941 2 -892 3 -930 21 -930 17 0 18 37 18 930 0 512 0 933 1 938 0 11 -28 14 -36 3z"/>
+                        <path d="M1780 1689 c0 -262 0 -269 20 -269 19 0 20 7 20 264 0 255 -1 264 -20 269 -20 5 -20 0 -20 -264z"/>
+                        <path d="M2040 1696 l0 -266 46 0 c38 0 45 3 42 18 -3 12 -12 16 -31 14 l-28 -3 1 248 c1 218 0 248 -14 251 -14 3 -16 -26 -16 -262z"/>
+                <path d="M2157 1608 c-4 -194 -7 -615 -7 -935 0 -576 0 -583 20 -583 20 0 20 7 20 935 0 774 -2 935 -13 935 -11 0 -15 -68 -20 -352z"/>
+                <path d="M1850 1924 c0 -33 33 -30 38 4 3 17 -2 22 -17 22 -16 0 -21 -6 -21 -26z"/>
+                <path d="M1910 1861 c0 -30 4 -41 15 -41 25 0 27 73 2 78 -14 3 -17 -4 -17 -37z"/>
+                <path d="M1850 1870 c0 -11 7 -20 15 -20 8 0 15 9 15 20 0 11 -7 20 -15 20 -8 0 -15 -9 -15 -20z"/>
+                <path d="M1980 1640 c0 -137 -1 -253 -2 -257 -2 -5 32 -9 75 -11 71 -3 78 -1 75 15 -3 14 -15 19 -61 21 l-58 3 3 240 c3 222 2 239 -14 239 -17 0 -18 -19 -18 -250z"/>
+                <path d="M2100 1685 c0 -167 2 -195 15 -195 13 0 15 28 15 195 0 167 -2 195 -15 195 -13 0 -15 -28 -15 -195z"/>
+                <path d="M1847 1826 c-8 -20 -9 -370 -1 -390 3 -9 14 -16 23 -16 14 0 16 22 16 210 0 188 -2 210 -16 210 -9 0 -19 -6 -22 -14z"/>
+                <path d="M1912 1569 l3 -231 -32 5 c-23 4 -33 2 -33 -7 0 -13 105 -26 218 -26 43 0 52 3 52 18 0 16 -9 17 -85 15 l-85 -3 0 230 c0 227 0 230 -21 230 -21 0 -21 -2 -17 -231z"/>
+                <path d="M1012 1458 c7 -19 38 -22 38 -4 0 10 -9 16 -21 16 -12 0 -19 -5 -17 -12z"/>
+                <path d="M1800 1270 c0 -19 7 -20 160 -20 153 0 160 1 160 20 0 19 -7 20 -160 20 -153 0 -160 -1 -160 -20z"/>
+                <path d="M785 1220 c-15 -24 13 -30 151 -30 137 0 144 1 144 20 0 19 -7 20 -144 20 -86 0 -147 -4 -151 -10z"/>
+                <path d="M1800 1211 c0 -20 4 -21 160 -21 146 0 160 2 160 18 0 15 -16 17 -160 21 -157 3 -160 3 -160 -18z"/>
+                <path d="M783 1152 c-3 -7 -3 -16 1 -19 3 -3 70 -6 148 -6 140 0 143 1 146 22 4 22 3 23 -143 19 -109 -2 -149 -6 -152 -16z"/>
+                <path d="M1800 1145 c0 -22 1 -22 160 -21 145 1 160 3 160 19 0 14 -10 17 -62 17 -35 1 -107 2 -160 4 -95 3 -98 3 -98 -19z"/>
+                <path d="M1800 1083 c0 -23 1 -23 160 -23 152 0 160 1 160 20 0 18 -9 19 -160 22 l-160 3 0 -22z"/>
+                <path d="M785 1090 c-15 -24 13 -30 151 -30 137 0 144 1 144 20 0 19 -7 20 -144 20 -86 0 -147 -4 -151 -10z"/>
+                <path d="M883 1033 c-82 -3 -103 -7 -103 -18 0 -13 25 -15 150 -15 143 0 150 1 150 20 0 17 -6 20 -47 18 -27 -1 -94 -4 -150 -5z"/>
+                <path d="M1800 1015 c0 -19 6 -20 157 -18 135 2 158 5 158 18 0 13 -23 16 -158 18 -151 2 -157 1 -157 -18z"/>
+                <path d="M782 953 c3 -17 43 -18 671 -21 650 -2 667 -2 667 17 0 18 -18 19 -671 20 -635 1 -670 0 -667 -16z"/>
+                <path d="M783 893 c-3 -7 -2 -17 1 -22 4 -7 240 -10 672 -10 656 0 665 0 662 20 -3 19 -16 20 -667 22 -515 2 -664 0 -668 -10z"/>
+                <path d="M787 833 c-4 -3 -7 -12 -7 -20 0 -11 118 -13 670 -13 663 0 670 0 670 20 0 20 -7 20 -663 20 -365 0 -667 -3 -670 -7z"/>
+                <path d="M783 763 c-3 -7 -2 -16 0 -20 3 -5 304 -8 669 -7 614 2 663 3 663 19 0 16 -49 17 -664 18 -509 2 -665 -1 -668 -10z"/>
+                <path d="M780 690 c0 -19 7 -20 150 -20 143 0 150 1 150 20 0 19 -7 20 -150 20 -143 0 -150 -1 -150 -20z"/>
+                <path d="M1800 690 c0 -19 7 -20 160 -20 153 0 160 1 160 20 0 19 -7 20 -160 20 -153 0 -160 -1 -160 -20z"/>
+                <path d="M923 642 c-118 -2 -143 -5 -143 -17 0 -13 23 -15 134 -15 74 0 141 -3 150 -6 11 -4 16 0 16 14 0 12 -3 22 -7 24 -5 2 -72 2 -150 0z"/>
+                <path d="M1800 621 c0 -17 4 -22 16 -17 9 3 81 6 160 6 130 0 144 2 144 18 0 15 -14 17 -160 17 l-160 0 0 -24z"/>
+                <path d="M787 560 c-5 -19 0 -20 144 -20 142 0 149 1 149 20 0 19 -7 20 -144 20 -135 0 -144 -1 -149 -20z"/>
+                <path d="M1800 560 c0 -19 7 -20 160 -20 153 0 160 1 160 20 0 19 -7 20 -160 20 -153 0 -160 -1 -160 -20z"/>
+                <path d="M922 513 c-124 -3 -143 -6 -140 -19 3 -14 25 -16 150 -18 147 -1 148 -1 148 22 0 12 -3 21 -7 20 -5 -1 -72 -4 -151 -5z"/>
+                <path d="M1800 501 c0 -20 5 -21 161 -21 147 0 160 1 157 18 -3 15 -20 17 -161 20 -153 3 -157 2 -157 -17z"/>
+                <path d="M930 450 c-128 -4 -145 -7 -148 -22 -3 -17 10 -18 148 -18 l150 0 0 25 c0 14 -1 24 -2 23 -2 -1 -68 -5 -148 -8z"/>
+                <path d="M1800 430 c0 -19 7 -20 160 -20 153 0 160 1 160 20 0 19 -7 20 -160 20 -153 0 -160 -1 -160 -20z"/>
+                <path d="M789 385 c0 0 -2 -10 -5 -22 l-4 -23 150 0 c149 0 150 0 150 23 0 22 -1 22 -145 22 -80 0 -145 0 -146 0z"/>
+                <path d="M1800 364 l0 -24 160 0 160 0 0 24 0 25 -160 -1 -160 0 0 -24z"/>
+                <path d="M787 313 c-4 -3 -7 -12 -7 -20 0 -10 32 -13 150 -13 143 0 150 1 150 20 0 19 -7 20 -143 20 -79 0 -147 -3 -150 -7z"/>
+                <path d="M1800 300 c0 -19 7 -20 160 -20 153 0 160 1 160 20 0 19 -7 20 -160 20 -153 0 -160 -1 -160 -20z"/>
+                <path d="M923 253 c-112 -3 -143 -6 -143 -17 0 -19 46 -26 181 -26 l119 0 0 25 c0 14 -3 24 -7 23 -5 -1 -72 -4 -150 -5z"/>
+                <path d="M1797 238 c-3 -9 -2 -19 1 -22 3 -3 77 -6 164 -6 l159 0 -3 23 c-3 22 -5 22 -160 22 -139 0 -157 -2 -161 -17z"/>
+                <path d="M895 181 c-89 -5 -110 -9 -110 -21 0 -13 24 -15 148 -18 l147 -3 0 26 c0 23 -4 25 -37 23 -21 -1 -87 -4 -148 -7z"/>
+                <path d="M1800 168 c0 -16 14 -18 150 -18 83 0 153 0 158 0 4 -1 8 8 10 19 3 20 -1 21 -157 18 -146 -2 -161 -4 -161 -19z"/>
+                <path d="M790 106 c0 -21 4 -21 142 -21 121 0 143 2 146 15 2 14 -10 15 -90 12 -51 -2 -117 0 -145 6 -50 9 -53 8 -53 -12z"/>
+                <path d="M1800 111 c0 -21 4 -21 160 -21 136 0 160 2 160 15 0 13 -22 15 -137 15 -76 0 -148 3 -160 6 -19 5 -23 2 -23 -15z"/>
+                    </g>
+                </svg>
+              </a>
+        <nav class="main-nav">
+            <ul class="nav-links">
+                <!-- THE CORRECTED ORDER -->
+                <li><a href="#projects" class="magnetic-link">Projects</a></li>
+                <li><a href="#about" class="magnetic-link">About</a></li>
+                <li><a href="#process" class="magnetic-link">Process</a></li>
+                <li><a href="#work" class="magnetic-link">Work</a></li>
+                <li><a href="#services" class="magnetic-link">Services</a></li>
+            </ul>
+        </nav>
+        <a href="#contact" class="cta-button-header magnetic-link">Start a Project</a>
+        <button class="hamburger" id="hamburger-menu" aria-label="Open Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</header>
+    <main class="content-hidden-initial">
+        <!-- 1. HOME (The Hook) -->
+        <section id="home" class="hero animated-section">
+            <div class="container hero-content">
+                <h1 class="hero-headline" id="hero-headline"></h1>
+                <p class="hero-subtext">We don't just build websites. We build digital experiences that perform at hyper speed and captivate your audience.</p>
+                <a href="#contact" class="cta-button">Begin Your Consultation</a>
+            </div>
+        </section>
+
+        <!-- 2. PROJECTS (The Proof) -->
+        <section id="projects" class="projects-section animated-section">
+            <div class="container">
+                <h2 class="section-title animate-typing">Proof of Impact</h2>
+               <div class="projects-grid">
+    <div class="project-card" data-project-id="neurobeads">
+        <div class="project-card-image"></div>
+        <div class="project-card-content">
+            <!-- This new div is the key to perfect alignment -->
+            <div class="project-card-header">
+                <h3>NEURO BEADS</h3>
+                <p>Educational Abacus Training Website</p>
+            </div>
+            <ul class="project-metrics">
+                <li>✓ Achieved 95/100 Google PageSpeed Score</li>
+            </ul>
+        </div>
+    </div>
+    <div class="project-card" data-project-id="innocore">
+        <div class="project-card-image"></div>
+        <div class="project-card-content">
+            <!-- This new div is the key to perfect alignment -->
+            <div class="project-card-header">
+                <h3>InnoCore Labs</h3>
+                <p>Modern SaaS & Innovation Agency</p>
+            </div>
+            <ul class="project-metrics">
+                <li>✓ Designed for a 30% increase in demo requests</li>
+            </ul>
+        </div>
+    </div>
+    <div class="project-card" data-project-id="couplet">
+        <div class="project-card-image"></div>
+        <div class="project-card-content">
+            <!-- This new div is the key to perfect alignment -->
+            <div class="project-card-header">
+                <h3>Couplet Coffee</h3>
+                <p>Playful & High-Converting E-commerce</p>
+            </div>
+            <ul class="project-metrics">
+                <li>✓ Built for a seamless, sub-second user experience</li>
+            </ul>
+        </div>
+    </div>
+</div>      
+  </section>
+
+        <!-- 3. ABOUT (The Trust Anchor) -->
+        <section id="about" class="about-section animated-section">
+            <div class="container">
+                <div class="about-grid">
+                    <div class="about-photo-column">
+                        <!-- Your professional photo goes here. It builds immediate trust. -->
+                        <!-- IMPORTANT: Replace 'img/founder-photo.png' with your actual photo file. -->
+                        <img src="img/founder-photo.png" alt="Lalit Manda, Founder of Hypercode" class="founder-photo holographic-lift">
+                    </div>
+                    <div class="about-logo-column">
+                        <div class="about-logo-wrapper holographic-lift">
+                            <svg class="about-logo" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="aboutLogoTitle">
+                                <title id="aboutLogoTitle">Hypercode's 'H' logo</title>
+                                <g transform="translate(0.000000,300.000000) scale(0.100000,-0.100000)" fill="#FFFFFF" stroke="none">
+                                    <path d="M720 1200 c0 -1105 0 -1110 20 -1110 20 0 20 6 21 1058 0 581 3 1081 5 1110 5 50 4 52 -20 52 l-26 0 0 -1110z"/>
+                                    <path d="M790 2303 c0 -5 1 -192 2 -418 2 -225 3 -458 3 -516 l0 -107 74 -6 c41 -3 105 -6 143 -6 61 0 68 2 68 20 0 19 -7 20 -124 20 l-125 0 0 500 c0 276 -3 505 -6 510 -7 12 -35 13 -35 3z"/>
+                                    <path d="M1810 2128 c0 -17 18 -18 231 -18 214 0 230 1 227 18 -3 16 -22 17 -231 17 -210 0 -227 -1 -227 -17z"/>
+                                    <path d="M650 2045 c0 -38 3 -45 20 -45 17 0 20 7 20 45 0 38 -3 45 -20 45 -17 0 -20 -7 -20 -45z"/>
+                                    <path d="M870 2078 c-1 -2 -2 -173 -4 -380 l-2 -378 108 0 c100 0 108 1 108 19 0 18 -7 20 -91 17 l-90 -2 2 360 c1 326 0 361 -15 364 -9 2 -16 2 -16 0z"/>
+                                    <path d="M930 1730 l0 -350 75 0 c68 0 75 2 75 20 0 17 -7 20 -52 20 l-53 0 0 318 c0 174 -2 323 -4 330 -2 6 -11 12 -22 12 -17 0 -18 -16 -19 -350z"/>
+                                    <path d="M1920 2059 c0 -18 4 -20 30 -14 l30 7 0 -51 c0 -40 -3 -51 -16 -51 -12 0 -15 6 -10 24 5 20 1 24 -25 30 -17 3 -65 6 -105 6 -59 0 -74 -3 -74 -15 0 -12 16 -15 84 -15 82 0 83 0 79 -24 -4 -19 0 -24 27 -30 70 -14 72 -12 68 54 l-3 60 100 2 c55 1 115 1 133 0 25 -1 32 3 32 17 0 18 -11 19 -175 19 -169 1 -175 0 -175 -19z"/>
+                                    <path d="M2135 2011 c-60 -4 -105 -9 -99 -13 5 -4 59 -8 120 -9 94 -1 109 1 112 15 2 9 -2 15 -10 14 -7 -1 -62 -4 -123 -7z"/>
+                                    <path d="M652 1038 c3 -839 5 -953 18 -953 13 0 15 114 18 953 2 948 2 952 -18 952 -20 0 -20 -4 -18 -952z"/>
+                                    <path d="M2225 1961 c-3 -6 -5 -429 -4 -941 2 -892 3 -930 21 -930 17 0 18 37 18 930 0 512 0 933 1 938 0 11 -28 14 -36 3z"/>
+                                    <path d="M1780 1689 c0 -262 0 -269 20 -269 19 0 20 7 20 264 0 255 -1 264 -20 269 -20 5 -20 0 -20 -264z"/>
+                                    <path d="M2040 1696 l0 -266 46 0 c38 0 45 3 42 18 -3 12 -12 16 -31 14 l-28 -3 1 248 c1 218 0 248 -14 251 -14 3 -16 -26 -16 -262z"/>
+                                    <path d="M2157 1608 c-4 -194 -7 -615 -7 -935 0 -576 0 -583 20 -583 20 0 20 7 20 935 0 774 -2 935 -13 935 -11 0 -15 -68 -20 -352z"/>
+                                    <path d="M1850 1924 c0 -33 33 -30 38 4 3 17 -2 22 -17 22 -16 0 -21 -6 -21 -26z"/>
+                                    <path d="M1910 1861 c0 -30 4 -41 15 -41 25 0 27 73 2 78 -14 3 -17 -4 -17 -37z"/>
+                                    <path d="M1850 1870 c0 -11 7 -20 15 -20 8 0 15 9 15 20 0 11 -7 20 -15 20 -8 0 -15 -9 -15 -20z"/>
+                                    <path d="M1980 1640 c0 -137 -1 -253 -2 -257 -2 -5 32 -9 75 -11 71 -3 78 -1 75 15 -3 14 -15 19 -61 21 l-58 3 3 240 c3 222 2 239 -14 239 -17 0 -18 -19 -18 -250z"/>
+                                    <path d="M2100 1685 c0 -167 2 -195 15 -195 13 0 15 28 15 195 0 167 -2 195 -15 195 -13 0 -15 -28 -15 -195z"/>
+                                    <path d="M1847 1826 c-8 -20 -9 -370 -1 -390 3 -9 14 -16 23 -16 14 0 16 22 16 210 0 188 -2 210 -16 210 -9 0 -19 -6 -22 -14z"/>
+                                    <path d="M1912 1569 l3 -231 -32 5 c-23 4 -33 2 -33 -7 0 -13 105 -26 218 -26 43 0 52 3 52 18 0 16 -9 17 -85 15 l-85 -3 0 230 c0 227 0 230 -21 230 -21 0 -21 -2 -17 -231z"/>
+                                    <path d="M1012 1458 c7 -19 38 -22 38 -4 0 10 -9 16 -21 16 -12 0 -19 -5 -17 -12z"/>
+                                    <path d="M1800 1270 c0 -19 7 -20 160 -20 153 0 160 1 160 20 0 19 -7 20 -160 20 -153 0 -160 -1 -160 -20z"/>
+                                    <path d="M785 1220 c-15 -24 13 -30 151 -30 137 0 144 1 144 20 0 19 -7 20 -144 20 -86 0 -147 -4 -151 -10z"/>
+                                    <path d="M1800 1211 c0 -20 4 -21 160 -21 146 0 160 2 160 18 0 15 -16 17 -160 21 -157 3 -160 3 -160 -18z"/>
+                                    <path d="M783 1152 c-3 -7 -3 -16 1 -19 3 -3 70 -6 148 -6 140 0 143 1 146 22 4 22 3 23 -143 19 -109 -2 -149 -6 -152 -16z"/>
+                                    <path d="M1800 1145 c0 -22 1 -22 160 -21 145 1 160 3 160 19 0 14 -10 17 -62 17 -35 1 -107 2 -160 4 -95 3 -98 3 -98 -19z"/>
+                                    <path d="M1800 1083 c0 -23 1 -23 160 -23 152 0 160 1 160 20 0 18 -9 19 -160 22 l-160 3 0 -22z"/>
+                                    <path d="M785 1090 c-15 -24 13 -30 151 -30 137 0 144 1 144 20 0 19 -7 20 -144 20 -86 0 -147 -4 -151 -10z"/>
+                                    <path d="M883 1033 c-82 -3 -103 -7 -103 -18 0 -13 25 -15 150 -15 143 0 150 1 150 20 0 17 -6 20 -47 18 -27 -1 -94 -4 -150 -5z"/>
+                                    <path d="M1800 1015 c0 -19 6 -20 157 -18 135 2 158 5 158 18 0 13 -23 16 -158 18 -151 2 -157 1 -157 -18z"/>
+                                    <path d="M782 953 c3 -17 43 -18 671 -21 650 -2 667 -2 667 17 0 18 -18 19 -671 20 -635 1 -670 0 -667 -16z"/>
+                                    <path d="M783 893 c-3 -7 -2 -17 1 -22 4 -7 240 -10 672 -10 656 0 665 0 662 20 -3 19 -16 20 -667 22 -515 2 -664 0 -668 -10z"/>
+                                    <path d="M787 833 c-4 -3 -7 -12 -7 -20 0 -11 118 -13 670 -13 663 0 670 0 670 20 0 20 -7 20 -663 20 -365 0 -667 -3 -670 -7z"/>
+                                    <path d="M783 763 c-3 -7 -2 -16 0 -20 3 -5 304 -8 669 -7 614 2 663 3 663 19 0 16 -49 17 -664 18 -509 2 -665 -1 -668 -10z"/>
+                                    <path d="M780 690 c0 -19 7 -20 150 -20 143 0 150 1 150 20 0 19 -7 20 -150 20 -143 0 -150 -1 -150 -20z"/>
+                                    <path d="M1800 690 c0 -19 7 -20 160 -20 153 0 160 1 160 20 0 19 -7 20 -160 20 -153 0 -160 -1 -160 -20z"/>
+                                    <path d="M923 642 c-118 -2 -143 -5 -143 -17 0 -13 23 -15 134 -15 74 0 141 -3 150 -6 11 -4 16 0 16 14 0 12 -3 22 -7 24 -5 2 -72 2 -150 0z"/>
+                                    <path d="M1800 621 c0 -17 4 -22 16 -17 9 3 81 6 160 6 130 0 144 2 144 18 0 15 -14 17 -160 17 l-160 0 0 -24z"/>
+                                    <path d="M787 560 c-5 -19 0 -20 144 -20 142 0 149 1 149 20 0 19 -7 20 -144 20 -135 0 -144 -1 -149 -20z"/>
+                                    <path d="M1800 560 c0 -19 7 -20 160 -20 153 0 160 1 160 20 0 19 -7 20 -160 20 -153 0 -160 -1 -160 -20z"/>
+                                    <path d="M922 513 c-124 -3 -143 -6 -140 -19 3 -14 25 -16 150 -18 147 -1 148 -1 148 22 0 12 -3 21 -7 20 -5 -1 -72 -4 -151 -5z"/>
+                                    <path d="M1800 501 c0 -20 5 -21 161 -21 147 0 160 1 157 18 -3 15 -20 17 -161 20 -153 3 -157 2 -157 -17z"/>
+                                    <path d="M930 450 c-128 -4 -145 -7 -148 -22 -3 -17 10 -18 148 -18 l150 0 0 25 c0 14 -1 24 -2 23 -2 -1 -68 -5 -148 -8z"/>
+                                    <path d="M1800 430 c0 -19 7 -20 160 -20 153 0 160 1 160 20 0 19 -7 20 -160 20 -153 0 -160 -1 -160 -20z"/>
+                                    <path d="M789 385 c0 0 -2 -10 -5 -22 l-4 -23 150 0 c149 0 150 0 150 23 0 22 -1 22 -145 22 -80 0 -145 0 -146 0z"/>
+                                    <path d="M1800 364 l0 -24 160 0 160 0 0 24 0 25 -160 -1 -160 0 0 -24z"/>
+                                    <path d="M787 313 c-4 -3 -7 -12 -7 -20 0 -10 32 -13 150 -13 143 0 150 1 150 20 0 19 -7 20 -143 20 -79 0 -147 -3 -150 -7z"/>
+                                    <path d="M1800 300 c0 -19 7 -20 160 -20 153 0 160 1 160 20 0 19 -7 20 -160 20 -153 0 -160 -1 -160 -20z"/>
+                                    <path d="M923 253 c-112 -3 -143 -6 -143 -17 0 -19 46 -26 181 -26 l119 0 0 25 c0 14 -3 24 -7 23 -5 -1 -72 -4 -150 -5z"/>
+                                    <path d="M1797 238 c-3 -9 -2 -19 1 -22 3 -3 77 -6 164 -6 l159 0 -3 23 c-3 22 -5 22 -160 22 -139 0 -157 -2 -161 -17z"/>
+                                    <path d="M895 181 c-89 -5 -110 -9 -110 -21 0 -13 24 -15 148 -18 l147 -3 0 26 c0 23 -4 25 -37 23 -21 -1 -87 -4 -148 -7z"/>
+                                    <path d="M1800 168 c0 -16 14 -18 150 -18 83 0 153 0 158 0 4 -1 8 8 10 19 3 20 -1 21 -157 18 -146 -2 -161 -4 -161 -19z"/>
+                                    <path d="M790 106 c0 -21 4 -21 142 -21 121 0 143 2 146 15 2 14 -10 15 -90 12 -51 -2 -117 0 -145 6 -50 9 -53 8 -53 -12z"/>
+                                    <path d="M1800 111 c0 -21 4 -21 160 -21 136 0 160 2 160 15 0 13 -22 15 -137 15 -76 0 -148 3 -160 6 -19 5 -23 2 -23 -15z"/>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="about-content-column">
+                        <h2 class="about-title animate-typing">The Architect</h2>
+                        <p class="about-name">Lalit Manda, Founder & CEO, Hypercode</p>
+                        <blockquote class="about-quote">"Fast, beautiful, and built with soul. In a world of templates, we decided to build landmarks."</blockquote>
+                        <p class="about-bio">
+                           Honestly? I started HyperCode because I was tired of what I was seeing online. So many amazing brands had websites that were just… slow. Clunky. Forgettable. It felt like the craft—the actual obsession with building something great—was getting lost in a sea of sameness.
+                           <br><br>
+                           Our approach is simple: your digital presence should be your sharpest tool, not an afterthought. It should feel handcrafted, because it is. We geek out on the details—the buttery-smooth animations, the code that makes a site load in a blink—because that’s where the magic really happens. This is more than a business to me. It’s about bringing back a level of artistry and raw performance that’s become far too rare. We're here for the founders and brands who refuse to settle for 'good enough.' If that's you, we'll get along great.
+                        </p>
+                        <a href="https://designedbylalit.github.io/my-portfolio/" target="_blank" rel="noopener noreferrer" class="cta-button">View Personal Portfolio</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. PROCESS (The Blueprint) -->
+        <section id="process" class="process-section stagger-container animated-section">
+            <div class="container">
+                <h2 class="section-title animate-typing">The HyperCode Blueprint</h2>
+                <div class="process-grid">
+                    <div class="process-card anim-child"><h3>01. Strategy</h3><p>We dive deep to understand your brand, goals, and audience to build a solid foundation.</p></div>
+                    <div class="process-card anim-child"><h3>02. Design</h3><p>Our designers craft clean, modern, and intuitive UI/UX that captivates and converts.</p></div>
+                    <div class="process-card anim-child"><h3>03. Build</h3><p>Our developers bring designs to life with cutting-edge, lightning-fast code.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. WORK (The 'Wow' Factor) -->
+        <section id="work" class="showcase-section animated-section">
+            <div class="container container-wide">
+                <h2 class="section-title animate-typing">Show, Don't Just Tell</h2>
+                <div class="showcase-grid">
+                    <div class="showcase-item-sandbox">
+                        <div class="sandbox-header">
+                            <h3>Live Demo: The Masterpiece Engine</h3>
+                            <p>This sandbox is alive. The card on the left is styled by the code on the right. Give our AI a challenge.</p>
+                        </div>
+                        <div class="sandbox-content">
+                            <div class="visual-view" id="visual-view">
+                                <div class="live-card" id="live-card">
+                                    <div class="live-card-content"><h3 id="live-card-headline">Hyper-Card</h3><p>This component is 100% powered by the editable CSS code next to it.</p></div>
+                                </div>
+                                <style id="sandbox-style"></style>
+                            </div>
+                            <div class="code-view">
+                                <div class="ai-prompt">
+                                    <div class="ai-prompt-text"><h5>AI Assistant</h5><p>Ready for a new masterpiece effect?</p></div>
+                                    <button class="ai-suggestion-btn" id="ai-suggestion-btn"><span class="sparkle">✨</span><span id="ai-prompt-action">Challenge the AI</span></button>
+                                </div>
+                                <div class="code-editor" id="code-css" contenteditable="true"><pre><code>/*
+  The Masterpiece Engine is ready.
+  Challenge the AI to augment this code.
+*/
+.live-card {
+  background: var(--card-bg);
+  border: 1px solid #00FFFF;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.4s ease;
+  
+  /*--AI-HOOK--*/
+}
+</code></pre></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. SERVICES (The Menu) -->
+        <section id="services" class="services-section animated-section">
+            <div class="container">
+                <h2 class="section-title animate-typing">Our Capabilities</h2>
+                <div class="process-grid">
+                    <div class="process-card"><h3>Custom Web Design</h3><p>Unique, user-centric designs that make your brand stand out from the noise.</p></div>
+                    <div class="process-card"><h3>Development</h3><p>High-performance front-end and back-end solutions built for speed and scale.</p></div>
+                    <div class="process-card"><h3>E-commerce</h3><p>Robust online stores designed to convert visitors into loyal customers.</p></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 7. CONTACT (The Handshake) -->
+        <section id="contact" class="contact-section animated-section">
+            <div class="container container-wide">                
+              <div class="conversational-form-container">
+                    <div class="form-progress"><div class="progress-bar" id="form-progress-bar"></div></div>
+                    <div id="conversational-form"><!-- Steps will be injected by JavaScript --></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer content-hidden-initial">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Hypercode</h3>
+                    <p>A Human-Led Digital Experience Studio.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Navigate</h3>
+                    <ul class="footer-links">
+                        <li><a href="#projects">Projects</a></li>   
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#process">Process</a></li>
+                        <li><a href="#work">Work</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>   <div class="footer-column">
+                    <h3>Connect</h3>
+                    <div class="footer-social">
+                        <a href="mailto:studio.hypercode@gmail.com" aria-label="Email"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+                        <a href="https://wa.me/918949365393" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                        <a href="https://www.instagram.com/hypercode.studio/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                    </div>
+                </div>
+            </div>
+             <div class="footer-bottom">
+                <div class="performance-dashboard">
+                    <span>Performance:</span>
+                    <span id="perf-load">Load: --ms</span>
+                    <span id="perf-fps" title="Frames Per Second">FPS: --</span>
+                    <span id="perf-size">Size: ~450KB</span>
+                    <span><a href="https://www.thegreenwebfoundation.org/" target="_blank" rel="noopener noreferrer" style="color:#22c55e; text-decoration:none;">Green Hosting</a></span>
+                </div>
+                <p>© 2025 Hypercode. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js" defer></script>
+    <script src="script.js" defer></script>
+</body>
+</html>
